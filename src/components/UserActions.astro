@@ -1,0 +1,49 @@
+---
+import Button from "./Button.astro";
+import DropdownMenu from "./DropdownMenu.astro";
+import Auth from "./Icons/Auth.astro";
+
+const userMenu = await fetch(`http://localhost:1337/api/navigation/render/4`).then(x  => x.json());
+---
+
+<div class="fap-user-actions">
+    <label for="menu-user">
+        <Auth />
+        <span>Михаил Мигалов</span>
+    </label>
+    <input hidden type="checkbox" name="menu-user" id="menu-user">
+    <DropdownMenu items={userMenu} />
+</div>
+<Button type="dark" url="/123">PrintProductoion</Button>
+
+<style lang="scss" is:global>
+    .fap-user-actions {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1em;
+
+        & label {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+        }
+    }
+
+    .fap-user-actions svg {
+        width: 26px;
+        height: 26px;
+        transition: var(--animate-default);
+        & circle, & path {
+            transition: var(--animate-default);
+        }
+    }
+
+    .fap-user-actions svg:hover circle {
+        fill: #000
+    }
+
+    .fap-user-actions svg:hover path {
+        stroke: #fff
+    }
+</style>

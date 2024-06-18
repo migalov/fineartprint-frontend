@@ -1,0 +1,32 @@
+---
+import cn from "classnames"
+const {type, url} = Astro.props
+---
+
+<a class={cn("fap-button", {
+    "fap-button--dark": type == "dark",
+    "fap-button--medium": type == "medium"
+})} href={url}><slot /></a>
+
+
+<style lang="scss">
+    .fap-button {
+        display: inline-block;
+        font-weight: 500;
+        padding: .85em 1.42em;
+        border-radius: 5px;
+        transition: var(--animate-default);
+        text-align: center;
+        &--dark {
+            background-color: var(--color-dark-gray);
+            color: var(--color-white)
+        }
+        &--medium {
+            background-color: var(--color-medium-gray);
+            color: var(--color-dark-gray)
+        }
+        &:hover {
+            opacity: .5;
+        }
+    }
+</style>

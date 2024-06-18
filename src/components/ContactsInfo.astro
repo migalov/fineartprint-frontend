@@ -1,0 +1,38 @@
+---
+import { Image } from "astro:assets";
+
+const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2`).then(x  => x.json());
+---
+<nav>
+    <ul class="fap-contacts-info">
+        {
+            contactsInfo.map(item => 
+                <>
+                    <li>
+                        <Image src={`http://localhost:1337${item?.icon?.url}`} width={12} height={12} alt={item.title} />
+                        {item.externalPath !== "#" && <a href={item?.externalPath}>{item.title}</a>}
+                        {item.externalPath == "#" && <span>{item.title}</span>}
+                    </li>
+
+                </>
+            )
+        }
+    </ul>
+</nav>
+
+<style lang="scss">
+    .fap-contacts-info {
+        display: flex;
+        flex-direction: column;
+        gap: .25em;
+
+        @media (width > 992px) {
+            flex-direction: row;
+            gap: 1em;
+        }
+
+        & li {
+            font-weight: 500;
+        }
+    }
+</style>
