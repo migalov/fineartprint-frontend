@@ -1,0 +1,125 @@
+---
+import Cross from "../Icons/Cross.astro";
+---
+
+<form class="fap-form-subscribe">
+  <h2 class="fap-form-subscribe__title">Подпишитесь на основную рассылку</h2>
+  <p>
+    Будьте в курсе актуальных новостей компании, новых технологий и
+    нестандартных решений для воплощения самых смелых идей в сфере коммерческой
+    полиграфии.
+  </p>
+  <div class="fap-form-subscribe-field">
+    <div class="fap-form-subscribe-field-wrap">
+      <input
+        class="fap-form-subscribe-field__input-email"
+        type="email"
+        placeholder="Email:"
+      />
+      <button
+        class="fap-form-subscribe-field__input-reset"
+        type="reset"
+        >
+        <Cross />
+      </button>
+    </div>
+
+    <div class="fap-form-subscribe-field__line"></div>
+    <button class="fap-form-subscribe-field__submit" type="submit">Подписаться</button>
+  </div>
+  <button class="fap-form-subscribe-status">Загрузка</button>
+  <div class="fap-form-subscribe-confirm">
+    <input hidden type="checkbox" name="confirm" id="confirm" />
+    <label for="confirm">Я согласен с политикой конфиденциальности</label>
+  </div>
+</form>
+
+<style lang="scss" is:global>
+  .fap-form-subscribe {
+    background-color: var(--color-light-gray);
+    max-width: 400px;
+    padding: 1.42em;
+    display: flex;
+    flex-direction: column;
+    gap: 1.42em;
+
+    * {
+      font-family: "Roboto", "Helvetica Neue", sans-serif;
+      margin: 0;
+    }
+  }
+  .fap-form-subscribe__title {
+    font-size: 1em;
+    text-transform: uppercase;
+  }
+  .fap-form-subscribe-field-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .fap-form-subscribe-field {
+    display: flex;
+    background-color: var(--color-white);
+    padding: 0.85em;
+    transition: var(--animate-default);
+    transition-property: border;
+    border: 2px solid transparent;
+  }
+  .fap-form-subscribe-field__input-reset {
+    border: none;
+    background-color: transparent;
+    outline: none;
+  }
+
+  .fap-form-subscribe-field__line {
+    width: 2px;
+    height: 20px;
+    margin: 0 5px;
+    background-color: var(--color-black);
+  }
+  .fap-form-subscribe-field__submit {
+    background-color: transparent;
+    font-weight: 500;
+    color: var(--color-primary);
+    border: none;
+    cursor: pointer;
+  }
+  .fap-form-subscribe-field__input-email {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
+  .fap-form-subscribe-field:has(> .fap-form-subscribe-field__input-email:focus),
+  .fap-form-subscribe-field:hover {
+    border: 2px solid var(--color-primary);
+  }
+  .fap-form-subscribe-confirm {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0 0 0 20px;
+  }
+  .fap-form-subscribe-confirm label {
+    position: relative;
+
+  }
+  .fap-form-subscribe-confirm label::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 20px;
+    height: 20px;
+    background-image: url(https://static.wow2print.com/storage/245/content/image/90930578266719a65d9af03.93046006.svg);
+    transition: var(--animate-default);
+  }
+
+  .fap-form-subscribe-confirm:has(input[type="checkbox"]:checked) {
+    position: relative;
+  }
+
+  .fap-form-subscribe-confirm input:checked + label::before {
+    background-image: url(https://static.wow2print.com/storage/245/content/image/94275259066719a645797d2.27350813.svg);
+  }
+</style>
