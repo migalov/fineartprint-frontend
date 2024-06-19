@@ -1,7 +1,7 @@
 ---
-import Button from "./Button.astro";
+import Button from "../Button.astro";
 import DropdownMenu from "./DropdownMenu.astro";
-import Auth from "./Icons/Auth.astro";
+import Auth from "../Icons/Auth.astro";
 
 const userMenu = await fetch(`http://localhost:1337/api/navigation/render/4`).then(x  => x.json());
 ---
@@ -20,8 +20,10 @@ const userMenu = await fetch(`http://localhost:1337/api/navigation/render/4`).th
     .fap-user-actions {
         position: relative;
         display: flex;
+        justify-content: flex-end;
         align-items: center;
         gap: 1em;
+        grid-area: u;
 
         & label {
             display: flex;

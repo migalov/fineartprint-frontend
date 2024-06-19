@@ -1,0 +1,30 @@
+---
+const footerBottomMenu = await fetch(`http://localhost:1337/api/navigation/render/6`).then(x  => x.json());
+---
+<ul class="fap-bottom-menu">
+    {
+        footerBottomMenu.map(item =>
+            <li>
+                <a href={item.externalPath}>{item.title}</a>
+            </li>
+        )
+    }
+</ul>
+
+<style lang="scss" is:global>
+    .fap-bottom-menu {
+        display: flex;
+        gap: .5em;
+        @media (width < 992px) {
+            flex-wrap: wrap;
+        }
+        & li {
+            @media (768px < width < 992px) {
+                width: calc(50% - .5em);
+            }
+        }
+        @media (width > 992px) {
+            justify-content: space-between;
+        }
+    }
+</style>

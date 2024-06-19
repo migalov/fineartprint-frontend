@@ -1,0 +1,42 @@
+---
+import Telegram from "../Icons/Telegram.astro";
+import VK from "../Icons/VK.astro";
+---
+
+<li class="fap-item-menu" data-grid-area="s">
+    <h3 class="fap-item-menu-title-dropdown">Мы в социальных сетях</h3>
+    <ul class="fap-item-menu-social">
+        <li><a href="https://vk.com"><VK /></a></li>
+        <li><a href="https://tg.com"><Telegram /></a></li>
+    </ul>
+</li>
+
+<style lang="scss" scoped>
+    .fap-item-menu-title-dropdown {
+        margin: 0;
+        padding: 0 0 1em;
+    }
+</style>
+
+<style lang="scss" is:global>
+    .fap-item-menu {
+        @media (min-width: 992px) {
+            padding: 0;
+        }
+    }
+    .fap-item-menu-social {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: .5em;
+        padding: 0 0 1em;
+        & svg circle {
+            transition: var(--animate-default);
+        }
+        & a:hover svg circle {
+            fill: var(--color-primary);
+        }
+        
+    }
+    
+</style>

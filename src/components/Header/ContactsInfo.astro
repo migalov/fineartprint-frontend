@@ -1,17 +1,17 @@
 ---
 import { Image } from "astro:assets";
 
-const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2`).then(x  => x.json());
+const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2?type=TREE`).then(x  => x.json());
 ---
 <nav>
     <ul class="fap-contacts-info">
         {
-            contactsInfo.map(item => 
+            contactsInfo[0].items?.map(item => 
                 <>
                     <li>
-                        <Image src={`http://localhost:1337${item?.icon?.url}`} width={12} height={12} alt={item.title} />
-                        {item.externalPath !== "#" && <a href={item?.externalPath}>{item.title}</a>}
-                        {item.externalPath == "#" && <span>{item.title}</span>}
+                        <Image src={`http://localhost:1337${item?.icon?.url}`} width={12} height={12} alt={item?.title} />
+                        {item.externalPath !== "#" && <a href={item?.externalPath}>{item?.title}</a>}
+                        {item.externalPath == "#" && <span>{item?.title}</span>}
                     </li>
 
                 </>

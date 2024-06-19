@@ -1,58 +1,57 @@
 ---
-import Button from "./Button.astro";
+import Button from "../Button.astro";
 import ContactsInfo from "./ContactsInfo.astro";
 import HeaderTop from "./HeaderTop.astro";
-import Auth from "./Icons/Auth.astro";
-import Cart from "./Icons/Cart.astro";
+import Cart from "../Icons/Cart.astro";
 import Logo from "./Logo.astro";
 import MainMenu from "./MainMenu.astro";
-import DropdownMenu from "./DropdownMenu.astro";
 import UserActions from "./UserActions.astro";
-
-const userMenu = await fetch(`http://localhost:1337/api/navigation/render/4`).then(x  => x.json());
-
 ---
 <header class="fap-header">
     <div class="container">
-        <div class="fap-header-left">
+        <div class="fap-header-grid">
             <HeaderTop />
+            <div class="fap-user-actions">
+                <Button type="dark" url="/123">PrintProductoion</Button>
+                <Button type="medium" url="/123">Войти</Button>
+                <a href="#"><Cart /></a>
+            </div>
             <div class="fap-header-middle">
                 <Logo />
                 <ContactsInfo />
             </div>
             <MainMenu />
-        </div>
-        <div class="fap-header-right">
-            <div class="fap-user-actions">
-                <Button type="medium" url="/123">Войти</Button>
-                <a href="#"><Cart /></a>
-            </div>
-            <Button type="dark" url="/123">PrintProductoion</Button>
         </div>
     </div>
 </header>
 <header class="fap-header">
     <div class="container">
-        <div class="fap-header-left">
+        <div class="fap-header-grid">
             <HeaderTop />
+            <div class="fap-user-actions">
+                <UserActions />
+                <a href="#"><Cart /></a>
+            </div>
             <div class="fap-header-middle">
                 <Logo />
                 <ContactsInfo />
             </div>
             <MainMenu />
-        </div>
-        <div class="fap-header-right">
-            <UserActions />
         </div>
     </div>
 </header>
 
 <style is:global>
     .fap-header {
-        & .container {
-            display: flex;
-            align-items: center;justify-content: space-between;
-        }
+    }
+    .fap-header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .fap-header-grid {
+        display: grid;
+        grid-template-areas: "tp u" "mid mid" "main main";
     }
     .fap-header-right {
         display: inline-flex;
@@ -65,6 +64,7 @@ const userMenu = await fetch(`http://localhost:1337/api/navigation/render/4`).th
         display: flex;
         gap: 1.42em;
         align-items: center;
+        grid-area: mid;
     }
 </style>
 

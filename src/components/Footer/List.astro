@@ -1,0 +1,36 @@
+---
+const { items } = Astro.props;
+---
+<details>
+    {
+        items?.items?.length > 1 &&
+        <summary>{items?.title}</summary>
+        <ul>
+            {
+                items?.items?.map( item =>
+                    <>
+                        <li>
+                            <a href={item?.path}>{item?.title}</a>
+                        </li>
+                    </>
+                )
+            }
+        </ul>
+    }
+    {
+        items[0] &&
+        <summary>{items[0]?.title}</summary>
+        <ul>
+            {
+                items[0]?.items?.map( item =>
+                    <>
+                        <li>
+                            <a href={item?.path}>{item?.title}</a>
+                        </li>
+                    </>
+                )
+            }
+        </ul>
+    }
+    
+</details>
