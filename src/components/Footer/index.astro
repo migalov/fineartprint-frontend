@@ -1,68 +1,103 @@
 ---
-import Telegram from "../Icons/Telegram.astro";
-import VK from "../Icons/VK.astro";
 import AdaptiveDropdownList from "./AdaptiveDropdownList.astro";
 import BottomMenu from "./BottomMenu.astro";
-import List from "./List.astro";
+import SiteMap from "./SiteMap.astro";
 import SocialNetworks from "./SocialNetworks.astro";
-const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2?type=TREE`).then(x  => x.json());
-const footerMenu = await fetch(`http://localhost:1337/api/navigation/render/5?type=TREE`).then(x  => x.json());
-
+const contactsInfo = await fetch(
+  `http://localhost:1337/api/navigation/render/2?type=TREE`
+).then((x) => x.json());
+const footerMenu = await fetch(
+  `http://localhost:1337/api/navigation/render/5?type=TREE`
+).then((x) => x.json());
 ---
-<footer class="fap-footer">
-    <nav class="container">
 
-        <ul class="fap-footer-dropdowns">
-            <SocialNetworks />
-            {
-                footerMenu.map( items => <AdaptiveDropdownList items={items} />)
-            }
-            <AdaptiveDropdownList items={contactsInfo[0]} />
-        </ul>
-        <BottomMenu />
-    </nav>
-    
+<footer class="fap-footer hide-sitemap">
+  <nav class="container">
+    <SiteMap />
+    <ul class="fap-footer-dropdowns">
+      <SocialNetworks />
+      {footerMenu.map((items) => <AdaptiveDropdownList items={items} />)}
+      <AdaptiveDropdownList items={contactsInfo[0]} />
+    </ul>
+    <BottomMenu />
+  </nav>
 </footer>
 
 <style lang="scss" is:global>
-    .fap-footer {
-        margin: 2rem 0 0;
-        padding: 2em;
-        background-color: var(--color-light-gray);
-        .container {
-            display: flex;
-            flex-direction: column;
-        }
-    }
-    .fap-footer-dropdowns {
-        width: 100%;
-        @media (768px <= width <= 992px) {
-            display: grid;
-            grid-template-areas: "s s" "area-20 area-21" "area-31 area-41";
-        }
-        @media (width > 992px) {
-            display: flex;
-            align-items: start;
-        }
-        
-        [data-grid-area="s"] {
-            grid-area: s;
-        }
-        [data-grid-area="20"] {
-            grid-area: 20;
-        }
-        [data-grid-area="21"] {
-            grid-area: 21;
-        }
-        [data-grid-area="31"] {
-            grid-area: 31;
-        }
-        [data-grid-area="41"] {
-            grid-area: 41;
-        }
+  .fap-footer {
+    margin: 2rem 0 0;
+    padding: 2em 0;
+    background-color: var(--color-light-gray);
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.42em;
     }
 
-    /* .fap-footer-wrap {
+    & .fap-sitemap {
+      display: none;
+    }
+
+    & .fap-footer-dropdowns {
+      display: grid;
+    }
+
+    &.show-sitemap {
+      box-shadow: 0 -10px 10px 0 rgba(0, 0, 0, 0.1);
+
+      & .fap-sitemap {
+        display: block;
+      }
+
+      & .fap-footer-dropdowns {
+        display: none;
+      }
+    }
+  }
+  .fap-footer-dropdowns {
+    width: 100%;
+    @media (width < 768px) {
+      grid-template-areas: "s" "area-20" "area-21" "area-31" "area-41";
+    }
+    @media (768px <= width <= 992px) {
+      display: grid;
+      grid-template-areas: "s s" "area-20 area-21" "area-31 area-41";
+    }
+    @media (width > 992px) {
+      display: flex;
+      align-items: start;
+      grid-template-areas: "s area-20 area-21 area-31 area-41";
+    }
+
+    [data-grid-area="s"] {
+      grid-area: s;
+    }
+    [data-grid-area="20"] {
+      grid-area: 20;
+    }
+    [data-grid-area="21"] {
+      grid-area: 21;
+    }
+    [data-grid-area="31"] {
+      grid-area: 31;
+    }
+    [data-grid-area="41"] {
+      grid-area: 41;
+    }
+  }
+
+  /* .fap-footer-wrap {
         display: flex;
     } */
 </style>
+
+<script>
+  document
+    .querySelectorAll(`a[href='#sitemap'], .fap-sitemap-close-button`)
+    .forEach((e) => {
+      e.addEventListener("click", (_e) => {
+        _e.preventDefault();
+        document.querySelector(".fap-footer").classList.toggle("show-sitemap");
+      });
+    });
+</script>

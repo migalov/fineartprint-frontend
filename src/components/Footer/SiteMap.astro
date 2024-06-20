@@ -1,0 +1,96 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import flattenAttributes from '../../utils/flattenAttributes';
+import ListSiteMap from './ListSiteMap.astro';
+const mapSiteJSON = await fetch(`http://localhost:1337/api/map-site?&populate[lists][populate][items]=*`).then(x  => x.json());
+const mapSiteData = flattenAttributes(mapSiteJSON)?.lists;
+---
+    <div class="fap-sitemap">
+        <ul class="fap-sitemap-lists">
+            <li class="fap-sitemap-col">
+                <ListSiteMap list={mapSiteData[0]} />
+                <ListSiteMap list={mapSiteData[1]} />
+            </li>
+            <li class="fap-sitemap-col">
+                <ListSiteMap list={mapSiteData[2]} />
+                <ListSiteMap list={mapSiteData[3]} />
+            </li>
+            <li class="fap-sitemap-col">
+                <ListSiteMap list={mapSiteData[4]} />
+                <ListSiteMap list={mapSiteData[5]} />
+            </li>
+            <li class="fap-sitemap-col">
+                <ListSiteMap list={mapSiteData[6]} />
+                <ListSiteMap list={mapSiteData[7]} />
+                <ListSiteMap list={mapSiteData[8]} />
+            </li>
+        </ul>
+        <button class="fap-sitemap-close-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                <path d="M1 1L13.5 13.5" stroke="black" stroke-width="2" stroke-linecap="round"></path>
+                <path d="M13.8571 1L1.35715 13.5" stroke="black" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+        </button>   
+    </div> 
+
+
+<style lang="scss" is:global>
+    .fap-sitemap {
+        position: relative;
+        overflow: hidden;
+    }
+    .fap-sitemap-lists {
+        position: relative;
+        display: grid;
+        gap: .85em;
+        max-height: 500px;
+        @media (width > 992px) {
+            margin: 0 1rem 0 0;
+        }
+        @media (width > 540px) {
+            grid-template-columns: repeat(2, minmax(auto, 1fr));
+        }
+        @media (width > 992px) {
+            grid-template-columns: repeat(4, minmax(auto, 1fr));
+        }
+
+        @media (width < 992px) {
+            overflow-y: auto;
+            padding: 0;
+            margin: 0;
+
+            &::-webkit-scrollbar {
+                width: 2px;
+            }
+
+            /* Track */
+            &::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.2);
+            }
+            
+            /* Handle */
+            &::-webkit-scrollbar-thumb {
+                background: rgba(0, 0, 0, 0.5);
+            }
+        }
+    }
+    .fap-sitemap-close-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: none;
+        outline: 0;
+        background: transparent;
+        cursor: pointer;
+        @media (width < 992px) {
+            right: 1rem;
+        }
+    }
+    .fap-sitemap-col {
+        display: flex;
+        flex-direction: column;
+        gap: .85em;
+    }
+    
+</style>
+

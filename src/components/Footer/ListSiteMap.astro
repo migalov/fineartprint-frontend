@@ -1,0 +1,36 @@
+---
+const { list } = Astro.props;
+---
+
+<div class="fap-sitemap-list" data-grid-area={list.id}>
+    <h4><a href="#">{list.title}</a></h4>
+    <ul>
+        {
+            list?.items?.map( _item =>
+                <>
+                    <li><a href="#">{_item.title}</a></li>
+                </>
+            )
+        }
+    </ul>
+</div>
+
+<style scoped>
+    h4 {
+        margin: 0;
+    }
+</style>
+
+<style lang="scss" is:global>
+    .fap-sitemap-list, .fap-sitemap-list ul {
+        display: flex;
+        flex-direction: column;
+        gap: .35em
+    }
+    .fap-sitemap-list h4 {
+        text-transform: uppercase;
+    }
+    .fap-sitemap-list a {
+        color: var(--color-dark-gray);
+    }
+</style>

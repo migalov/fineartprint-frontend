@@ -16,7 +16,8 @@ const footerBottomMenu = await fetch(`http://localhost:1337/api/navigation/rende
         display: flex;
         gap: .5em;
         @media (width < 992px) {
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: .35em;
         }
         & li {
             @media (768px < width < 992px) {
