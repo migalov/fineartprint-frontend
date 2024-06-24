@@ -1,0 +1,26 @@
+---
+import Burger from "../Icons/Burger.astro";
+import Phone from "../Icons/Phone.astro";
+---
+
+<div class="fap-user-actions-mobile">
+    <Phone />
+    <Burger id="main-menu-toggle" />
+</div>
+
+<style lang="scss" is:global>
+    .fap-user-actions-mobile {
+        display: flex;
+        align-items: center;
+        gap: 1em;
+        @media (width > 768px) {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    document.getElementById("main-menu-toggle").addEventListener("click", () => {
+        document.querySelector(".fap-header-menu-block").classList.toggle("show"); 
+    })
+</script>

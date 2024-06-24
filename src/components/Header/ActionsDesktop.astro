@@ -1,0 +1,25 @@
+---
+import PrintProduction from "../Buttons/PrintProduction.astro";
+import Cart from "../Icons/Cart.astro";
+import UserActions from "./UserActions.astro";
+---
+
+<div class="fap-user-actions-desktop">
+    <PrintProduction />
+    <UserActions />
+    <a href="#">
+        <Cart />
+    </a>
+    
+</div>
+
+<style lang="scss" is:global>
+    .fap-user-actions-desktop {
+        display: flex;
+        align-items: center;
+        gap: 1em;
+        @media (width < 768px) {
+            display: none;
+        }
+    }
+</style>

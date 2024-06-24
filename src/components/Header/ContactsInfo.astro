@@ -3,7 +3,7 @@ import { Image } from "astro:assets";
 
 const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2?type=TREE`).then(x  => x.json());
 ---
-<nav>
+<nav class="fap-contacts-nav">
     <ul class="fap-contacts-info">
         {
             contactsInfo[0].items?.map(item => 
@@ -21,6 +21,11 @@ const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2?
 </nav>
 
 <style lang="scss">
+    .fap-contacts-nav {
+        @media (width < 768px) {
+            display: none;
+        }
+    }
     .fap-contacts-info {
         display: flex;
         flex-direction: column;

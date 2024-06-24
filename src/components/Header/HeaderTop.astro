@@ -4,7 +4,7 @@ import DropdownMenu from "./DropdownMenu.astro";
 const headerTop = await fetch(`http://localhost:1337/api/navigation/render/1?type=TREE`).then(x  => x.json());
 ---
 
-<nav>
+<nav class="fap-top-nav">
     <ul class="fap-top-menu">
         {
             headerTop.map(item => 
@@ -24,7 +24,11 @@ const headerTop = await fetch(`http://localhost:1337/api/navigation/render/1?typ
 </nav>
 
 <style lang="scss" is:global>
-    
+    .fap-top-nav {
+        @media (width < 768px) {
+            display: none;
+        }
+    }
     .fap-top-menu {
         display: flex;
         align-items: center;
