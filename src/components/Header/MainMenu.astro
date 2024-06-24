@@ -2,34 +2,165 @@
 const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type=TREE`).then(x  => x.json());
 ---
 
-<nav>
-    <ul class="fap-main-menu">
-        {
-            mainMenu.map(item => 
-                <>
-                    <li>
-                        <a href={item.path}>{item.title}</a>                    
-                    </li>
+<header class="fap-header-menu-block">
+    <nav class="fap-main-menu-nav container">
+        <ul class="fap-main-menu-list">
+            {
+                mainMenu.map(item => 
+                    <>
+                        <li>
+                            <a href={item.path}>{item.title}</a>
+                            {
+                                item.items.length > 0 && 
+                                <div class="fap-main-menu-dropdown-lvl-1">
+                                <div class="container">
+                                    <div class="fap-main-menu-dropdown-lvl-1-wrap">
 
-                </>
-            )
-        }
-    </ul>
-</nav>
+                                        <ul class="fap-main-menu-dropdown-lvl-1-list">
+                                            {
+                                                item?.items?.map( _item => 
+                                                    <li data-id={_item.id}>
+                                                        <a href={_item.path}>{_item?.title}</a>
+                                                        {/* <ul class="fap-main-menu__dropdown-lvl-2-list">
+                                                            {
+                                                                _item?.items.map( __item => 
+                                                                    <li>
+                                                                        <a href={__item.path}>
+                                                                            <img width="20" height="20" src={__item?.iconURL} alt="" srcset="" />
+                                                                            <span>{__item?.title}</span>
+                                                                        </a>
+                                                                    </li>
+                                                                )
+                                                            }
+                                                        </ul> */}
+                                                    </li>
+                                                )
+                                            }
+                                        </ul>    
+                                        {
+                                            item?.items?.map( _item =>
+                                                <ul class="fap-main-menu__dropdown-lvl-2-list" data-parent-id={_item.id}>
+                                                    {
+                                                        _item?.items?.map( __item => 
+                                                            <li>
+                                                                <a href={__item.path}>
+                                                                    <img width="20" height="20" src={__item?.iconURL} alt="" srcset="" />
+                                                                    <span>{__item?.title}</span>
+                                                                </a>
+                                                            </li>
+                                                        )
+                                                    }
+                                                </ul>
+                                            )
+                                        }
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            }
+                                    
+                        </li>
+
+                    </>
+                )
+            }
+        </ul>
+    </nav>
+    
+</header>
 
 <style lang="scss">
-    .fap-main-menu {
+    .fap-header-menu-block {
+        position: relative;
+    }
+    .fap-main-menu-list {
         display: flex;
         align-items: center;
         gap: 1.42em;
         grid-area: main;
 
-        & > li a {
+        & > li > a {
             display: inline-block;
             padding: 20px 0;
             font-weight: 500;
             text-transform: uppercase;
             color: var(--color-dark-gray);
         }
+
+        & > li:hover > .fap-main-menu-dropdown-lvl-1 {
+            display: block;
+        }
+    }
+    .fap-main-menu-dropdown-lvl-1 {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100vw;
+        box-shadow: var(--shadow-default);
+        padding: .85rem 0;
+
+        & li > a {
+            display: inline-block;
+            padding: 10px;
+            color: var(--color-dark-gray);
+            &:hover {
+                background-color: var(--color-medium-gray);
+            }
+        }
+    }
+    .fap-main-menu-dropdown-lvl-1-wrap {
+        display: flex;
+    }
+    .fap-main-menu-dropdown-lvl-1-list {
+        position: relative;
+        width: max-content;
+
+        & > li {
+            display: flex;
+            & > a {
+                width: 220px;
+            }
+            &:hover {
+                & .fap-main-menu__dropdown-lvl-2-list {
+                    display: block;
+                    width: max-content;
+                }
+            }
+        }
+    }
+    .fap-main-menu__dropdown-lvl-2-list {  
+        display: none;
+        & li {
+            display: flex;
+            align-items: center;
+        }
+        &.active {
+            display: block;
+        }
     }
 </style>
+
+<script>
+    document.querySelectorAll('.fap-main-menu-dropdown-lvl-1-list > li').forEach(el => {
+        el.addEventListener("mouseover", () => {
+            let id = el.getAttribute('data-id');
+            el.closest('.fap-main-menu-dropdown-lvl-1-wrap').querySelector(`.fap-main-menu__dropdown-lvl-2-list[data-parent-id="${id}"]`).classList.add("active");
+        });
+        el.addEventListener("mouseout", () => {
+            let id = el.getAttribute('data-id');
+            el.closest('.fap-main-menu-dropdown-lvl-1-wrap').querySelector(`.fap-main-menu__dropdown-lvl-2-list[data-parent-id="${id}"]`).classList.remove("active")
+        });
+    });
+    document.querySelectorAll(`.fap-main-menu__dropdown-lvl-2-list`).forEach(e => {
+        e.addEventListener("mouseover", () => {
+            e.classList.add("active");
+        })
+    });
+    document.querySelectorAll(`.fap-main-menu__dropdown-lvl-2-list`).forEach(e => {
+        e.addEventListener("mouseout", () => {
+            e.classList.remove("active");
+        })
+    })
+
+</script>

@@ -7,7 +7,7 @@ import Logo from "./Logo.astro";
 import MainMenu from "./MainMenu.astro";
 import UserActions from "./UserActions.astro";
 ---
-<header class="fap-header">
+<!-- <header class="fap-header">
     <div class="container">
         <div class="fap-header-grid">
             <HeaderTop />
@@ -23,7 +23,7 @@ import UserActions from "./UserActions.astro";
             <MainMenu />
         </div>
     </div>
-</header>
+</header> -->
 <header class="fap-header">
     <div class="container">
         <div class="fap-header-grid">
@@ -36,13 +36,14 @@ import UserActions from "./UserActions.astro";
                 <Logo />
                 <ContactsInfo />
             </div>
-            <MainMenu />
         </div>
     </div>
 </header>
+<MainMenu />
 
 <style is:global>
     .fap-header {
+        border-bottom: 1px solid var(--color-medium-gray);
     }
     .fap-header-container {
         display: flex;
@@ -51,7 +52,7 @@ import UserActions from "./UserActions.astro";
     }
     .fap-header-grid {
         display: grid;
-        grid-template-areas: "tp u" "mid mid" "main main";
+        grid-template-areas: "tp u" "mid mid";
     }
     .fap-header-right {
         display: inline-flex;
