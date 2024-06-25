@@ -3,12 +3,19 @@ const { list } = Astro.props;
 ---
 
 <div class="fap-sitemap-list" data-grid-area={list.id}>
-    <h4><a href="#">{list.title}</a></h4>
+    <h4>
+        {
+            list?.url && <a href={list.url}>{list.title}</a>
+        }
+        {
+            !list?.url && list?.title
+        }
+    </h4>
     <ul>
         {
             list?.items?.map( _item =>
                 <>
-                    <li><a href="#">{_item.title}</a></li>
+                    <li><a href={_item.url}>{_item.title}</a></li>
                 </>
             )
         }
@@ -25,12 +32,22 @@ const { list } = Astro.props;
     .fap-sitemap-list, .fap-sitemap-list ul {
         display: flex;
         flex-direction: column;
-        gap: .35em
+        // gap: .35em
+    }
+    .fap-sitemap-list :is(h4, li) {
+        transition: var(--animate-default);
+        padding: .35em;
+    }
+    .fap-sitemap-list :is(h4, li):hover {
+        background-color: var(--color-white);
     }
     .fap-sitemap-list h4 {
         text-transform: uppercase;
+        color: var(--color-dark-gray);
     }
     .fap-sitemap-list a {
         color: var(--color-dark-gray);
+        display: inline-block;
+        width: 100%;
     }
 </style>

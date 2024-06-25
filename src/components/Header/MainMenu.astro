@@ -50,7 +50,9 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
                                                         _item?.items?.map( __item => 
                                                             <li>
                                                                 <a href={__item?.path}>
-                                                                    <img width="50" height="50" src={__item?.iconURL} alt="" srcset="" />
+                                                                    {
+                                                                        __item?.iconURL && <img width="50" height="50" src={__item?.iconURL} alt="" srcset="" />
+                                                                    }
                                                                     <span>{__item?.title}</span>
                                                                 </a>
                                                             </li>

@@ -10,8 +10,8 @@ const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2?
                 <>
                     <li>
                         <Image src={`http://localhost:1337${item?.icon?.url}`} width={12} height={12} alt={item?.title} />
-                        {item.externalPath !== "#" && <a href={item?.externalPath}>{item?.title}</a>}
-                        {item.externalPath == "#" && <span>{item?.title}</span>}
+                        {item.path !== "#" && <a href={item?.path}>{item?.title}</a>}
+                        {item.path == "#" && <span>{item?.title}</span>}
                     </li>
 
                 </>
@@ -24,6 +24,12 @@ const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2?
     .fap-contacts-nav {
         @media (width < 768px) {
             display: none;
+        }
+        & a {
+            transition: var(--animate-default);
+            &:hover {
+                color: var(--color-primary);
+            }
         }
     }
     .fap-contacts-info {

@@ -34,6 +34,15 @@ const footerMenu = await fetch(
       gap: 1.42em;
     }
 
+    & a {
+        color: var(--color-dark-gray);
+        transition: var(--animate-default);
+        &:hover {
+          color: var(--color-primary);
+        }
+    }
+
+
     & .fap-sitemap {
       display: none;
     }
