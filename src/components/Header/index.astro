@@ -28,24 +28,36 @@ import ActionsMobile from "./ActionsMobile.astro";
         </div>
     </div>
 </header> -->
-<header class="fap-header">
-    <div class="container">
-        <div class="fap-header-grid">
-            <HeaderTop />
-            <div class="fap-user-actions">
-                <ActionsDesktop />
-                <ActionsMobile />
-            </div>
-            <div class="fap-header-middle">
-                <Logo />
-                <ContactsInfo />
+<div class="fap-headers">
+    <header class="fap-header">
+        <div class="container">
+            <div class="fap-header-grid">
+                <HeaderTop />
+                <div class="fap-user-actions">
+                    <ActionsDesktop />
+                    <ActionsMobile />
+                </div>
+                <div class="fap-header-middle">
+                    <Logo />
+                    <ContactsInfo />
+                </div>
             </div>
         </div>
-    </div>
-</header>
-<MainMenu />
+    </header>
+    <MainMenu />
+</div>
+
 
 <style lang="scss" is:global>
+    .fap-headers {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--color-white);
+        border-bottom: 1px solid var(--color-medium-gray);
+        z-index: 2;
+    }
     .fap-header {
 
         padding: 1.5rem 0;
@@ -108,4 +120,12 @@ import ActionsMobile from "./ActionsMobile.astro";
     //     stroke: #fff
     // }
 </style>
+
+<script>
+    const paddingTopBody = () => {
+        document.body.style.paddingTop = `${document.querySelector('.fap-headers').clientHeight}px`;
+    }
+    paddingTopBody();
+    window.addEventListener("resize", paddingTopBody)
+</script>
 

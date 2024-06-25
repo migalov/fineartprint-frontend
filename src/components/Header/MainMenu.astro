@@ -1,23 +1,35 @@
 ---
+import Login from "../Buttons/Login.astro";
+import PrintProduction from "../Buttons/PrintProduction.astro";
 import Arrow from "../Icons/Arrow.astro";
+import BigCross from "../Icons/BigCross.astro";
 
 const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type=TREE`).then(x  => x.json());
 ---
 
 <header class="fap-header-menu-block">
+        
+    <div class="fap-header-user-head">
+        <div class="fap-header-user-head-left">
+            <PrintProduction />
+            <Login />
+        </div>
+        <BigCross className="main-menu-toggle" />
+    </div>
     <nav class="fap-main-menu-nav container">
         <ul class="fap-main-menu-list">
             {
-                mainMenu.map(item => 
+                mainMenu?.map(item => 
                     <>
                         <li>
-                            <a href={item.path}>{item.title}</a>
-                            <input class="fap-main-menu-list-checkbox-hidden" hidden type="checkbox" id={`head-item-${item.id}`} />
-                            <label class="fap-main-menu-list-checkbox" for={`head-item-${item.id}`}>
-                                <Arrow />
-                            </label>
+                            <a href={item?.path}>{item?.title}</a>
+                            
                             {
-                                item.items.length > 0 && 
+                                item?.items?.length > 0 && 
+                                <input class="fap-main-menu-list-checkbox-hidden" hidden type="radio" name="head-menu" id={`head-item-${item.id}`} />
+                                <label class="fap-main-menu-list-checkbox" for={`head-item-${item.id}`}>
+                                    <Arrow />
+                                </label>
                                 <div class="fap-main-menu-dropdown-lvl-1">
                                 <div class="container">
                                     <div class="fap-main-menu-dropdown-lvl-1-wrap">
@@ -26,31 +38,19 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
                                             {
                                                 item?.items?.map( _item => 
                                                     <li data-id={_item.id}>
-                                                        <a href={_item.path}>{_item?.title}</a>
-                                                        {/* <ul class="fap-main-menu__dropdown-lvl-2-list">
-                                                            {
-                                                                _item?.items.map( __item => 
-                                                                    <li>
-                                                                        <a href={__item.path}>
-                                                                            <img width="20" height="20" src={__item?.iconURL} alt="" srcset="" />
-                                                                            <span>{__item?.title}</span>
-                                                                        </a>
-                                                                    </li>
-                                                                )
-                                                            }
-                                                        </ul> */}
+                                                        <a class:list={[ { "arrow-right": _item?.items?.length > 0 } ]} href={_item.path}>{_item?.title}</a>
                                                     </li>
                                                 )
                                             }
                                         </ul>    
                                         {
                                             item?.items?.map( _item =>
-                                                <ul class="fap-main-menu__dropdown-lvl-2-list" data-parent-id={_item.id}>
+                                                <ul class="fap-main-menu__dropdown-lvl-2-list" data-parent-id={_item?.id}>
                                                     {
                                                         _item?.items?.map( __item => 
                                                             <li>
-                                                                <a href={__item.path}>
-                                                                    <img width="20" height="20" src={__item?.iconURL} alt="" srcset="" />
+                                                                <a href={__item?.path}>
+                                                                    <img width="50" height="50" src={__item?.iconURL} alt="" srcset="" />
                                                                     <span>{__item?.title}</span>
                                                                 </a>
                                                             </li>
@@ -76,13 +76,38 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
 </header>
 
 <style lang="scss" is:global>
+    .fap-header-user-head {
+        padding: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // z-index: 1;
+        @media (width > 768px) {
+            display: none;
+        }
+    }
+    .fap-header-user-head-left {
+        display: flex;
+        align-items: center;
+        gap: 1em;
+        flex-wrap: wrap;
+    }
     .fap-header-menu-block {
-        position: relative;
+        // position: fixed;
+        // top: 0;
+        // left: 0;
+        // right: 0;
         border-bottom: 1px solid var(--color-medium-gray);
         @media (width < 768px) {
             opacity: 0;
             transform: translateX(-100vw);
             transition: ease 1s;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--color-white);
+            max-height: 100vh;
             &.show {
                 opacity: 1;
                 transform: translateX(0);
@@ -101,6 +126,7 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
             @media (width < 768px) {
                 width: 100%;
                 align-items: center;
+
             }
 
             & svg {
@@ -123,17 +149,34 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
         & > li:hover > .fap-main-menu-dropdown-lvl-1 {
             pointer-events: all;
             @media (width > 768px) {
-                // display: block;
                 opacity: 1;
                 padding: .85rem 0;
+                transform: translateY(-1px);
             }
             
         }
 
         @media (width < 768px) {
+            padding: 1em 0;
             flex-direction: column;
             align-items: start;
-            gap: 0;
+            gap: .5em;
+            max-height: calc(100vh - 100px);
+            overflow: auto;
+            padding-right: 1rem;
+            &::-webkit-scrollbar {
+                width: 2px;
+            }
+
+            /* Track */
+            &::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.2);
+            }
+            
+            /* Handle */
+            &::-webkit-scrollbar-thumb {
+                background: rgba(0, 0, 0, 0.5);
+            }
         }
     }
     .fap-main-menu-list-checkbox-hidden:checked {
@@ -159,6 +202,8 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
         pointer-events: none;
         grid-template-rows: 0fr;
         transition: grid-template-rows 500ms;
+        background-color: var(--color-white);
+        // z-index: 1;
 
         width: 100vw;
         @media (width > 768px) {
@@ -176,13 +221,13 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
             display: inline-flex;
             align-items: center;
             gap: 1em;
-            padding: .55em;
+            padding: 0.2em 0.55em;
             color: var(--color-dark-gray);
             &:hover {
                 background-color: var(--color-medium-gray);
             }
             @media (width > 768px) {
-                padding: .85em;
+                padding: .68em .65em;
             }
         }
 
@@ -206,6 +251,27 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
             display: flex;
             & > a {
                 width: 220px;
+                
+                &.arrow-right {
+                    @media (width > 768px) {
+                        position: relative;
+                        &::after {
+                            content: "";
+                            position: absolute;
+                            right: 0;
+                            top: 50%;
+                            transform: translateX(-50%);
+                            width: 12px;
+                            height: 12px;
+                            background-image: url("https://static.wow2print.com/storage/245/content/image/1547042087667abb4d996a04.78982530.svg");
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                            transform: rotate(-90deg);
+                            transform-origin: 0% 50%;
+                        }
+                    }
+                }
+                
             }
         }
     }
@@ -215,6 +281,7 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
         width: 0;
         opacity: 0;
         transition: opacity var(--animate-default);
+        height: 0;
         & li {
             display: flex;
             align-items: center;
@@ -226,6 +293,8 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
                 display: flex;
                 flex-direction: column;
                 visibility: visible;
+                flex-wrap: wrap;
+                height: inherit;
             }
             
         }
@@ -234,6 +303,8 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
 
 <script>
     document.querySelectorAll('.fap-main-menu-dropdown-lvl-1-list > li').forEach(el => {
+        
+
         el.addEventListener("mouseover", () => {
             let id = el.getAttribute('data-id');
             el.closest('.fap-main-menu-dropdown-lvl-1-wrap').querySelector(`.fap-main-menu__dropdown-lvl-2-list[data-parent-id="${id}"]`).classList.add("active");
@@ -253,5 +324,24 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
             e.classList.remove("active");
         })
     })
+    
+
+    const resizeDropdownLvltwo = () => {
+        if (window.innerWidth > 768) {
+            document.querySelectorAll('.fap-main-menu-list > li').forEach(e => {
+                let heightDropdown = e?.querySelector('.fap-main-menu-dropdown-lvl-1')?.clientHeight;
+                e?.addEventListener("mouseover", () => {
+                    console.log(heightDropdown);
+                    e.querySelectorAll('.fap-main-menu__dropdown-lvl-2-list').forEach(_e => {
+                        _e.style.maxHeight = `${heightDropdown}px`;
+                        // console.log(_e);
+                    })
+                })
+            })
+        }
+        
+    }
+    resizeDropdownLvltwo();
+    window.addEventListener("resize", resizeDropdownLvltwo);
 
 </script>

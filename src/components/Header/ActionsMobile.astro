@@ -5,7 +5,7 @@ import Phone from "../Icons/Phone.astro";
 
 <div class="fap-user-actions-mobile">
     <Phone />
-    <Burger id="main-menu-toggle" />
+    <Burger className={"main-menu-toggle"} />
 </div>
 
 <style lang="scss" is:global>
@@ -20,7 +20,12 @@ import Phone from "../Icons/Phone.astro";
 </style>
 
 <script>
-    document.getElementById("main-menu-toggle").addEventListener("click", () => {
-        document.querySelector(".fap-header-menu-block").classList.toggle("show"); 
+    // document.getElementById("main-menu-toggle").addEventListener("click", () => {
+    //     document.querySelector(".fap-header-menu-block").classList.toggle("show"); 
+    // })
+    document.querySelectorAll(".main-menu-toggle").forEach((e) => {
+        e.addEventListener("click", () => {
+            document.querySelector(".fap-header-menu-block").classList.toggle("show"); 
+        })
     })
 </script>
