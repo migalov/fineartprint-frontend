@@ -1,0 +1,15 @@
+---
+import FAQItem from "./FAQItem.astro";
+
+const { block } = Astro.props;
+---
+
+<ul id={block?.slug}>
+    {
+        <li>
+            <ul>
+                {block?.faqItems.map((_item) => <FAQItem slug={block.slug} item={_item} />)}
+            </ul>
+        </li>
+    }
+</ul>

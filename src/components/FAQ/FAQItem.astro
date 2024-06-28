@@ -1,0 +1,73 @@
+---
+import Arrow from "../Icons/Arrow.astro";
+
+const { item, slug } = Astro.props;
+const nameDropdown = `${slug}-${item.id}`
+---
+<li class="fap-faq-item">
+    <input type="checkbox" id={nameDropdown}>
+    
+    <div class="fap-faq-item-head">
+        <h2 class="fap-faq-item-question">{item?.title}</h2>
+        <label for={nameDropdown}>
+            <Arrow />
+        </label>
+    </div>
+
+    
+    <div class="fap-faq-item-answer">
+        <div class="fap-faq-item-answer-inner" set:html={item?.body} />
+    </div>
+</li>
+
+<style lang="scss" is:global>
+
+    h2 {
+        font-size: 1.14em;
+        color: var(--color-primary);
+    }
+
+    .fap-faq-item {
+        padding: 1em 0;
+        border-bottom: 1px solid var(--color-medium-gray);
+        & [type="checkbox"] {
+            display: none;
+            &:checked {
+                & ~ .fap-faq-item-answer {
+                    grid-template-rows: 1fr;
+                }
+                & ~ .fap-faq-item-head label svg {
+                    transform: rotate(180deg);
+
+                }
+                & ~ .fap-faq-item-head label > svg path {
+                    stroke: var(--color-primary);
+                }
+            }
+        }
+    }
+    .fap-faq-item-head {
+        display: flex;
+        justify-content: space-between;
+        & label {
+            flex: 1;
+            text-align: right;
+        }
+    }
+    .fap-faq-item-head label svg {
+        transition: var(--animate-default);
+    }
+    .fap-faq-item-answer {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 500ms;
+        width: 100%;
+    }
+
+    .fap-faq-item-answer-inner {
+
+        overflow: hidden;
+    }
+
+</style>
+

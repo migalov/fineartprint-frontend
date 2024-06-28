@@ -1,0 +1,94 @@
+---
+import FAQBlock from "../components/FAQ/FAQBlock.astro";
+import FAQItem from "../components/FAQ/FAQItem.astro";
+import Layout from "../layouts/Layout.astro";
+import flattenAttributes from "../utils/flattenAttributes";
+
+const response = await fetch(
+    `http://localhost:1337/api/faqs?populate[faqBlocks][populate][faqItems]=*`,
+).then((res) => res.json());
+const d = flattenAttributes(response.data[0]);
+---
+
+<Layout title="Технические характеристики.">
+    <div class="container">
+        <div class="fap-faq-page">
+            <h1 class="fap-faq-page__title">{d?.title}</h1>
+            <ul class="fap-faq-page__anchors">
+                {
+                    d?.faqBlocks?.map((item) => (
+                        <li>
+                            <a class="fap-btn fap-btn-default fap-faq-anchor" href={`#${item.slug}`}>{item.title}</a>
+                        </li>
+                    ))
+                }
+            </ul>
+            <section class="fap-faq-page-content">
+                {
+                    d.faqBlocks.map(block => <FAQBlock block={block} />)
+                }
+            </section>
+        </div>
+    </div>
+</Layout>
+
+<style lang="scss" is:global>
+    .fap-faq-page {
+        display: grid;
+        grid-template-areas: "t" "anc" "cont";
+        @media (width > 768px) {
+            grid-template-areas:
+                "anc anc t t t t t t"
+                "anc anc cont cont cont cont cont cont";
+                grid-template-columns: 2fr 6fr;
+        }
+        
+            gap: 1.42rem;
+    }
+    .fap-faq-page__title {
+        grid-area: t;
+    }
+    .fap-faq-page__anchors {
+        display: flex;
+        // flex-flow: row;
+        // overflow-x: auto;
+        gap: 1.25rem;
+        background-color: #fff;
+        grid-area: anc;
+        overflow: auto;
+
+        @media (width <= 768px) {
+            white-space: nowrap;
+        }
+
+        @media (width > 768px) {
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+        }
+        
+        gap: 1em;
+    }
+    .fap-faq-page-content {
+        grid-area: cont;
+    }
+    .fap-faq-item-answer {
+        grid-area: cont;
+        & ul {
+            margin: 1em 0;
+            list-style-type: circle;
+        }
+    }
+    .fap-faq-anchor {
+        padding: .7em 1em;
+        font-size: 1rem;
+        font-weight: 400;
+        font-family: "Roboto", 'Helvetica Neue', sans-serif;
+    }
+</style>
+
+<script>
+    document.querySelectorAll(".fap-faq-page-content meta").forEach(el => {
+        el.remove();
+    })
+</script>
