@@ -1,0 +1,217 @@
+---
+import Layout from '../layouts/Layout.astro';
+import flattenAttributes from '../utils/flattenAttributes';
+
+export function getStaticPaths() {
+  return [
+    {params: {slug: 'about-the-printing-house'}},
+    {params: {slug: 'contacts'}},
+    {params: {slug: 'pay-deliverly'}}
+  ];
+}
+
+const {slug} =  Astro.params;
+const response = await fetch(`http://localhost:1337/api/static-pages?filters[slug]=${slug}&populate[content][populate]=*`).then(x  => x.json());
+const page = flattenAttributes(response.data[0]);
+---
+<Layout title={page?.title}>
+    <div class="container">
+        <div class="fap-static-page">
+            <h1>{page?.title}</h1>
+            <div class="fap-static-page-grid">
+                {
+                    page?.content?.map( content =>
+                        <>
+                            {
+                                content.__component === "page-blocks.image" && <img src={content.src} alt={content.title} />
+                            }
+                            {
+                                content.__component === "page-blocks.html-block" && <div class:list={[
+                                    "fap-static-page-grid-block",
+                                    {"fap-static-page-grid-block--yellow fap-static-page-grid-block--padding": content.bgColor === "yellow"},
+                                    {"fap-static-page-grid-block--green fap-static-page-grid-block--padding": content.bgColor === "green"}
+                                ]} set:html={content?.body}>
+                                    
+                                    {
+                                        content?.iconsBlock?.length > 1 &&
+                                        <ul class:list={[
+                                            {
+                                                "fap-static-page-grid-block__list-icons": content?.iconsBlock?.length > 1
+                                            }
+                                        ]}>
+                                            {
+                                                content?.iconsBlock?.map (icon => 
+                                                    <>
+                                                        <li><a href={icon?.url}><img data-src={icon?.src} alt={icon?.title} title={icon?.title} /></a></li>
+                                                    </>
+                                                )
+                                            }
+                                        </ul>
+                                        }
+                                    {
+                                        content?.iconsBlock?.length == 1 &&
+                                            <img data-src={content?.iconsBlock[0].src}
+                                                class:list={["fap-static-page-grid-block__icon"]}
+                                                alt={content?.iconsBlock[0]?.title} 
+                                                width={content?.iconsBlock[0]?.width}
+                                            />
+                                    }
+                                </div>
+                            }
+                            {
+                                // content.__component === "page-blocks.map" &&
+                                // <iframe src={content.src} width="100%" height="400px" frameborder="0"></iframe> 
+                            }
+                            
+                                
+                        </>
+                    )
+                }
+            </div>
+            <div class="fap-static-page-widgets">
+                {
+                    page?.content?.map( content =>
+                        <>
+                            {
+                                content.__component === "page-blocks.map" &&
+                                <iframe data-src={content.src} width="100%" height="400px" frameborder="0"></iframe> 
+                            }
+                        </>
+                    )
+                }
+            </div>
+        </div>
+    </div>
+    
+</Layout>
+
+
+<style lang="scss">
+    .fap-static-page {
+
+        padding: 2rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2.14rem
+        
+    }
+    .fap-static-page-grid {
+        display: grid;
+        gap: 2.14rem 1.42rem;
+        grid-template-columns: 1fr;
+        @media (width > 992px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+
+        & > :is(img, div, iframe) {
+            border-radius: 15px;
+        }
+
+        & > img {
+            height: 100%;
+            object-fit: cover;
+            @media (width < 992px) {
+                width: 100%;
+                height: min(40vh, 300px);
+            }
+        }
+
+
+
+
+    }
+    .fap-static-page-grid-block {
+        display: flex;
+        flex-direction: column;
+        gap: .5em;
+        &--green {
+            background-color: var(--color-primary);
+        }
+
+        &--yellow {
+            background-color: var(--color-yellow);
+        }
+
+        &--padding {
+            padding: 1.42em;
+        }
+    }
+    .fap-static-page-grid-block__icon {
+        order: 1;
+        margin-top: auto;
+        margin-left: auto;
+        @media (width < 540px) {
+            display: none;
+        }
+    }
+    .fap-static-page-grid-block__list-icons {
+        order: 1;
+        display: grid;
+        gap: .5em;
+        grid-template-columns: repeat(2, auto);
+        @media (width > 540px) {
+            grid-template-columns: repeat(4, auto);
+            align-items: center;
+        }
+        & li {
+            transition: var(--animate-default);
+            &:hover {
+                opacity: .7;
+            }
+        }
+    }
+    .fap-static-page-widgets {
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: var(--shadow-default);
+    }
+</style>
+
+<style lang="scss" is:global>
+    .fap-static-page {
+        & a {
+            transition: var(--animate-default);
+            text-decoration: underline;
+        }
+        & p {
+            // margin: .5em 0;
+        }
+        & h2, h3 {
+            margin: .75em 0 .2em;
+        }
+
+        & h1 {
+            font-size: 1.71rem;
+        }
+
+        & h2 {
+            font-size: 1.42rem;
+        }
+
+        & h3 {
+            font-size: 1.14rem;
+        }
+    }
+    .fap-static-page-grid-block ul:has(img) {
+
+        // @media (width > 992px) {
+        //     grid-template-columns: repeat(4, auto);
+        // }
+    }
+    .fap-static-page-grid-block {
+        &--green a:hover {
+            color: #0066CC;
+            text-decoration: none;
+        }
+
+        &--yellow a:hover {
+            color: #0066CC;
+            text-decoration: none;
+        }
+    }
+    .fap-static-page-grid iframe {
+        box-shadow: var(--shadow-default);
+        grid-area: auto / span 2;
+    }
+</style>

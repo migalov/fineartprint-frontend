@@ -39,10 +39,13 @@ const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2?
 
         @media (width > 992px) {
             flex-direction: row;
-            gap: 1em;
+            gap: 1.5em;
         }
 
         & li {
+            display: flex;
+            align-items: center;
+            gap: .35em;
             font-weight: 500;
         }
     }

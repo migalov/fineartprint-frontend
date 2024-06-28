@@ -25,6 +25,8 @@ const headerTop = await fetch(`http://localhost:1337/api/navigation/render/1?typ
 
 <style lang="scss" is:global>
     .fap-top-nav {
+        display: flex;
+        align-items: center;
         @media (width < 768px) {
             display: none;
         }
@@ -33,7 +35,6 @@ const headerTop = await fetch(`http://localhost:1337/api/navigation/render/1?typ
         display: flex;
         align-items: center;
         gap: 1.42em;
-        padding: 20px 0;
         grid-area: tp;
         & > li {
             position: relative;

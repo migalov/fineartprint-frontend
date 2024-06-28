@@ -1,6 +1,5 @@
 ---
 import FAQBlock from "../components/FAQ/FAQBlock.astro";
-import FAQItem from "../components/FAQ/FAQItem.astro";
 import Layout from "../layouts/Layout.astro";
 import flattenAttributes from "../utils/flattenAttributes";
 
@@ -34,24 +33,35 @@ const d = flattenAttributes(response.data[0]);
 
 <style lang="scss" is:global>
     .fap-faq-page {
-        display: grid;
         grid-template-areas: "t" "anc" "cont";
         @media (width > 768px) {
+            display: grid;
             grid-template-areas:
                 "anc anc t t t t t t"
                 "anc anc cont cont cont cont cont cont";
-                grid-template-columns: 2fr 6fr;
+                grid-template-columns: repeat(8, 1fr);
         }
         
             gap: 1.42rem;
     }
     .fap-faq-page__title {
+        padding: 1rem 0;
+        background-color: var(--color-white);
         grid-area: t;
+        z-index: 1;
+        @media (width < 768px) {
+            position: sticky;
+        }
+        @media (width > 768px) {
+            padding: 1.5rem 0 0;
+        }
+        @media (width > 992px) {
+            padding: 2rem 0 0;
+        }
     }
     .fap-faq-page__anchors {
+        position: sticky;
         display: flex;
-        // flex-flow: row;
-        // overflow-x: auto;
         gap: 1.25rem;
         background-color: #fff;
         grid-area: anc;
@@ -59,18 +69,32 @@ const d = flattenAttributes(response.data[0]);
 
         @media (width <= 768px) {
             white-space: nowrap;
+            padding: 0 0 1rem;
+            z-index: 1;
+            position: sticky;
         }
 
         @media (width > 768px) {
             flex-direction: column;
             position: sticky;
-            top: 0;
+            top: calc(172px + 2rem);
+            align-self: start;
+        }
+
+        @media (width > 768px) {
+            padding: 1.5rem 0;
+        }
+        @media (width > 992px) {
+            padding: 2rem 0;
         }
         
         gap: 1em;
     }
     .fap-faq-page-content {
         grid-area: cont;
+        & > ul:last-child > li > ul > li:last-child  {
+            border: none;
+        }
     }
     .fap-faq-item-answer {
         grid-area: cont;
@@ -84,11 +108,75 @@ const d = flattenAttributes(response.data[0]);
         font-size: 1rem;
         font-weight: 400;
         font-family: "Roboto", 'Helvetica Neue', sans-serif;
+        background-color: var(--color-medium-gray);
+        color: var(--color-black);
+        &:hover, &.active {
+            background-color: var(--color-primary);
+            color: var(--color-black);
+            font-weight: 500;
+        }
     }
 </style>
 
 <script>
-    document.querySelectorAll(".fap-faq-page-content meta").forEach(el => {
-        el.remove();
-    })
+    // document.querySelectorAll(".fap-faq-page-content meta").forEach(el => {
+    //     el.remove();
+    // });
+
+
+
+    const navLinks = document.querySelectorAll('.fap-faq-anchor');
+    const anchors = document.querySelectorAll('a[href*="#"]');
+    const anchorsBlock = document.querySelector('.fap-faq-page__anchors');
+    const parts = document.querySelectorAll('.fap-fap-block');
+    const title = document.querySelector('.fap-faq-page__title');
+    const page = document.querySelector('.fap-faq-page');
+
+
+    const stickyHead = () => {
+        title.style.top = `${document.querySelector('.fap-headers').clientHeight}px`;
+        anchorsBlock.style.top = `${document.querySelector('.fap-headers').clientHeight + (window.innerWidth < 768 ? title.clientHeight : 0)}px`
+    }
+
+    window.addEventListener("load", stickyHead);
+    window.addEventListener("resize", stickyHead);
+
+    const clearActiveClass = () => {
+        navLinks.forEach(link => link.classList.remove('active'));
+    }
+
+    const heightRecalculation = () => {
+        for (let anchor of anchors) {
+            anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            clearActiveClass();
+            const blockID = anchor.getAttribute('href').substr(1);
+            const coordsScrollY = document.getElementById(blockID).offsetTop - document.querySelector('.fap-headers').clientHeight - ( window.innerWidth < 768 ? (title.clientHeight + anchorsBlock.clientHeight) : 0 );
+            window.scrollTo({
+                top: coordsScrollY,
+                behavior: "smooth",
+                });
+            });  
+        }
+    }
+
+    window.addEventListener("load", heightRecalculation);
+    window.addEventListener("resize", heightRecalculation);
+
+    
+
+    function setActiveLink() {
+        parts.forEach((part, index) => {
+            const top = part.offsetTop - document.querySelector('.fap-headers').clientHeight - (window.innerWidth < 768 ? (title.clientHeight + anchorsBlock.clientHeight) : 0);
+            const bottom = top + part.clientHeight;
+
+            if (window.scrollY >= top && window.scrollY < bottom) {
+                clearActiveClass();
+                navLinks[index].classList.add('active');
+            }
+        });
+    }
+    window.addEventListener('load', setActiveLink);
+    window.addEventListener('scroll', setActiveLink);
+
 </script>
