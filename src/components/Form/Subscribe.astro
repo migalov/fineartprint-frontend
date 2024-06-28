@@ -29,7 +29,7 @@ import Status from "./Status.astro";
     name="subscribtion_form"
     method="POST"
     id="form-subscribe"
-    action="https://api.unisender.com/ru/api/subscribe"
+    action="https://h.integrations-hub.ru/wh/38/1lfvk4c/irlsKYTYRHlIMjXaGAzBC5Qrr5yuKJqP2mZJXkqOKAo/"
   >
     <h2 class="fap-form-subscribe__title">Подпишитесь на основную рассылку</h2>
     <p>
@@ -46,7 +46,6 @@ import Status from "./Status.astro";
           placeholder="Email:"
           required
         />
-        <input type="hidden" name="api_key" value="6hadgjas9rex4cy5cpikxws8srgoitgnctdonbma">
         <button class="fap-form-subscribe-field__input-reset" type="reset">
           <Cross />
         </button>
@@ -55,15 +54,13 @@ import Status from "./Status.astro";
       <div class="fap-form-subscribe-field__line"></div>
       <button class="fap-form-subscribe-field__submit" type="submit">Подписаться</button>
     </div>
-    <!-- <Status disabled={false} status="pending">Загрузка</Status>
-    <Status disabled={true} status="error">Ошибка! Попробуйте ещё раз</Status>
-    <Status disabled={false} status="success">Готово</Status> -->
+    <Status disabled={false} status="pending">Загрузка...</Status>
+    <Status disabled={true} status="error"></Status>
+    <Status disabled={false} status="success">Готово! Проверьте свою электронную почту для потверждения регистрации.</Status>
     <div class="fap-form-subscribe-confirm">
-      <div>
-
-      </div>
-      <input hidden type="checkbox" checked name="confirm" id="confirm" required />
+      <input type="checkbox" name="confirm" id="confirm" />
       <label for="confirm">Я согласен с политикой конфиденциальности</label>
+      <p class="fap-form-subscribe-confirm__error-message">Это поле обязательно к заполнению.</p>
     </div>
   </form>
 </div>
@@ -81,23 +78,35 @@ import Status from "./Status.astro";
       font-family: "Roboto", "Helvetica Neue", sans-serif;
       margin: 0;
     }
+
+    @media (width < 768px) {
+      font-size: 90%;
+    }
   }
   .fap-form-subscribe__title {
     font-size: 1em;
     text-transform: uppercase;
   }
-  .fap-form-subscribe-field-wrap {
-    flex: 1;
-    display: flex;
-    align-items: center;
-  }
+
   .fap-form-subscribe-field {
     display: flex;
     background-color: var(--color-white);
     padding: 0.85em;
     transition: var(--animate-default);
     transition-property: border;
-    border: 2px solid transparent;
+    border: 2px solid var(--color-light-gray);
+    @media (width < 400px) {
+      padding: 0;
+      flex-direction: column;
+    }
+  }
+  .fap-form-subscribe-field-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    @media (width < 400px) {
+      padding: .5em;
+    }
   }
   .fap-form-subscribe-field__input-reset {
     border: none;
@@ -110,6 +119,9 @@ import Status from "./Status.astro";
     height: 20px;
     margin: 0 5px;
     background-color: var(--color-black);
+    @media (width < 400px) {
+      display: none;
+    }
   }
   .fap-form-subscribe-field__submit {
     background-color: transparent;
@@ -117,6 +129,11 @@ import Status from "./Status.astro";
     color: var(--color-primary);
     border: none;
     cursor: pointer;
+    @media (width < 400px) {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      padding: .5em;
+    }
   }
   .fap-form-subscribe-field__input-email {
     flex: 1;
@@ -133,7 +150,15 @@ import Status from "./Status.astro";
     align-items: center;
     position: relative;
     padding: 0 0 0 1.42em;
+    flex-wrap: wrap;
   }
+  .fap-form-subscribe-confirm__error-message {
+      display: none;
+      width: 100%;
+      font-size: 90%;
+      margin: .5rem 0 0;
+      color: #ff0000;
+    }
   .fap-form-subscribe-confirm label {
     position: relative;
     padding: 0 0 0 1em;
@@ -149,7 +174,12 @@ import Status from "./Status.astro";
     background-image: url(https://static.wow2print.com/storage/245/content/image/90930578266719a65d9af03.93046006.svg);
     transition: var(--animate-default);
   }
-
+  .fap-form-subscribe-confirm input {
+    overflow: hidden;
+    width: 0;
+    height: 0;
+  }
+  
   .fap-form-subscribe-confirm:has(input[type="checkbox"]:checked) {
     position: relative;
   }
@@ -164,20 +194,65 @@ import Status from "./Status.astro";
   form.addEventListener("submit", (e) => {
 
     e.preventDefault();
-
     let formData = new FormData(form);
+    console.log(formData.get("confirm"));
 
-        fetch(`${e.target.action}?format=json&api_key=${formData.get('api_key')}&
-list_ids=1,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,21,23,24,25&fields[email]=${formData.get('email')}`, {
-            method: form.method,
-            body: formData 
-        })
-        .then(response => {
+    if (formData.get("confirm")) {
+
+      messageConfirm.style.display = "none";
+      showStatus("pending");
+
+      fetch(`${e.target.action}`, {
+          method: form.method,
+          body: formData 
+      })
+      .then(response => {
+          if(response.ok) {
             console.log(`Code status: ${response.status}`);
             console.log(`Status text: ${response.statusText}`);
-        })
-        .catch(error => {
-            console.log(error);
-        })
-    });
+            showStatus("success");
+          }
+
+      })
+      .catch(error => {
+          console.log(error);
+          showStatus("error");
+          successStatus.querySelector('span').innerHTML == `Ошибка ${error.status}: ${error.statusText}.<br />Попробуйте повторить попытку.`
+      })
+    }
+    else {
+      messageConfirm.style.display = "block";
+    }
+  });
+
+  const pendingStatus = document.querySelector(`.fap-form-subscribe__status--pending`);
+  const errorStatus = document.querySelector(`.fap-form-subscribe__status--error`);
+  const successStatus = document.querySelector(`.fap-form-subscribe__status--success`);
+  const emailInput = document.querySelector(`.fap-form-subscribe-field`);
+  const messageConfirm = document.querySelector(`.fap-form-subscribe-confirm__error-message`);
+
+  const showStatus = (status) => {
+    if (status == "pending") {
+      pendingStatus.removeAttribute("hidden");
+      successStatus.setAttribute("hidden", "");
+      errorStatus.setAttribute("hidden", "");
+      emailInput.style.display = "none";
+    }
+    if (status == "success") {
+      pendingStatus.setAttribute("hidden", "");
+      successStatus.removeAttribute("hidden");
+      errorStatus.setAttribute("hidden", "");
+      emailInput.style.display = "none";
+    }
+    if (status == "error") {
+      pendingStatus.setAttribute("hidden", "");
+      successStatus.setAttribute("hidden", "");
+      errorStatus.removeAttribute("hidden");
+      emailInput.style.display = "flex";
+    }
+  }
+
+
+
+
 </script>

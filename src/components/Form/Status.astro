@@ -1,6 +1,6 @@
 ---
 import cn from 'classnames'
-const {disabled, status} = Astro.props;
+const {disabled, status, hidden = true} = Astro.props;
 const classButton = cn("fap-form-subscribe__status", {
 		"fap-form-subscribe__status--pending": status == "pending",
 		"fap-form-subscribe__status--success": status == "success",
@@ -8,7 +8,7 @@ const classButton = cn("fap-form-subscribe__status", {
 	});
 ---
 
-<button class={classButton} disabled={disabled}>
+<button hidden={hidden} class={classButton} disabled={disabled}>
     <span><slot /></span>
 </button>
 

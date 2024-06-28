@@ -9,7 +9,7 @@ const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2?
             contactsInfo[0].items?.map(item => 
                 <>
                     <li>
-                        <Image src={`http://localhost:1337${item?.icon?.url}`} width={12} height={12} alt={item?.title} />
+                        <Image src={item.iconURL} width={12} height={12} alt={item?.title} />
                         {item.path !== "#" && <a href={item?.path}>{item?.title}</a>}
                         {item.path == "#" && <span>{item?.title}</span>}
                     </li>
