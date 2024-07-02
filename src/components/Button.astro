@@ -1,9 +1,9 @@
 ---
 import cn from "classnames"
-const {type, url} = Astro.props
+const {type, url, className = ""} = Astro.props
 ---
 
-<a class={cn("fap-button", {
+<a class={cn("fap-button", className, {
     "fap-button--dark": type == "dark",
     "fap-button--medium": type == "medium"
 })} href={url}><slot /></a>

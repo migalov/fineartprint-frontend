@@ -32,12 +32,24 @@ const headerTop = await fetch(`http://localhost:1337/api/navigation/render/1?typ
         }
     }
     .fap-top-menu {
+        background-color: var(--color-white);
         display: flex;
         align-items: center;
         gap: 1.42em;
         grid-area: tp;
         & > li {
             position: relative;
+            & > a {
+                color: var(--color-black);
+                text-transform: uppercase;
+                font-family: "FontMedium", Roboto, Helvetica, sans-serif;
+                font-size: .85em;
+                color: var(--color-dark-gray);
+                &:hover {
+                    text-decoration: none;
+                    font-weight: 500;
+                }
+            }
         }
     }
 </style>

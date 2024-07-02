@@ -2,7 +2,9 @@
 import Login from "../Buttons/Login.astro";
 import PrintProduction from "../Buttons/PrintProduction.astro";
 import Arrow from "../Icons/Arrow.astro";
+import Auth from "../Icons/Auth.astro";
 import BigCross from "../Icons/BigCross.astro";
+import UserActions from "./UserActions.astro";
 
 const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type=TREE`).then(x  => x.json());
 ---
@@ -11,8 +13,12 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
         
     <div class="fap-header-user-head">
         <div class="fap-header-user-head-left">
-            <PrintProduction />
-            <Login />
+            <!--<PrintProduction /> -->
+            <UserActions num={1} />
+            <!-- 
+            <Auth />
+            <span class="fap-menu-user__name">Михаил Мигалов</span>
+            <Login /> -->
         </div>
         <BigCross className="main-menu-toggle" />
     </div>
@@ -38,7 +44,7 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
                                             {
                                                 item?.items?.map( _item => 
                                                     <li data-id={_item.id}>
-                                                        <a class:list={[ { "arrow-right": _item?.items?.length > 0 } ]} href={_item.path}>{_item?.title}</a>
+                                                        <a class:list={[ { "arrow-right current": _item?.items?.length > 0 } ]} href={_item.path.replace('https://fineart-print.ru/', '')}>{_item?.title}</a>
                                                     </li>
                                                 )
                                             }
@@ -49,7 +55,7 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
                                                     {
                                                         _item?.items?.map( __item => 
                                                             <li>
-                                                                <a href={__item?.path}>
+                                                                <a href={__item?.path.replace('https://fineart-print.ru/', '')}>
                                                                     {
                                                                         __item?.iconURL && <img width="50" height="50" data-src={__item?.iconURL} alt="" srcset="" />
                                                                     }
@@ -78,11 +84,14 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
 </header>
 
 <style lang="scss" is:global>
+    .fap-main-menu-nav.container {
+        @media (width < 768px) {
+            padding: 0 1.5rem 1.5em;
+        }
+        
+    }
     .fap-header-user-head {
-        padding: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        padding: 1.5rem;
         // z-index: 1;
         @media (width > 768px) {
             display: none;
@@ -91,8 +100,8 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
     .fap-header-user-head-left {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 1em;
-        flex-wrap: wrap;
     }
     .fap-header-menu-block {
         // position: fixed;
@@ -143,9 +152,15 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
             font-weight: 500;
             text-transform: uppercase;
             color: var(--color-dark-gray);
+            font-family: "FontMedium", Roboto, Helvetica, sans-serif;
+            &:hover {
+                color: var(--color-black);
+                text-decoration: none;
+            }
             @media (width > 768px) {
                 padding: 20px 0;
             }
+            
         }
 
         & > li:hover > .fap-main-menu-dropdown-lvl-1 {
@@ -254,21 +269,20 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
             display: flex;
             flex-direction: column;
             flex-wrap: wrap;
-            max-height: 450px;
+            max-height: 470px;
         }
 
         & > li {
             display: flex;
             & > a {
                 width: 220px;
-                
                 &.arrow-right {
                     @media (width > 768px) {
                         position: relative;
                         &::after {
                             content: "";
                             position: absolute;
-                            right: 0;
+                            left: 100%;
                             top: 50%;
                             transform: translateX(-50%);
                             width: 12px;
@@ -281,7 +295,9 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
                         }
                     }
                 }
-                
+            }
+            & a:hover {
+                text-decoration: none;
             }
         }
     }
@@ -308,6 +324,29 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
             }
             
         }
+    }
+    .fap-top-menu 
+    .fap-main-menu-list > li > a.current::before,
+    .fap-main-menu-dropdown-lvl-1-list > li > a.current::before,
+    .fap-main-menu__dropdown-lvl-2-list > li > a::before {
+        content: "";
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0;
+        height: 2px;
+        background-color: var(--color-primary);
+    }
+    .fap-main-menu-list > li > a.current::before {
+        left: 0;
+    }
+    .fap-main-menu-dropdown-lvl-1-list > li > a.current::before {
+        width: calc(100% - .65em);
+        bottom: 0;
+        right: 0;
+    }
+    .fap-main-menu__dropdown-lvl-2-list > li a.current::before {
+        width: calc(100% - 1em);
+        bottom: 0;
     }
 </style>
 
@@ -344,7 +383,6 @@ const mainMenu = await fetch(`http://localhost:1337/api/navigation/render/3?type
                     console.log(heightDropdown);
                     e.querySelectorAll('.fap-main-menu__dropdown-lvl-2-list').forEach(_e => {
                         _e.style.maxHeight = `${heightDropdown}px`;
-                        // console.log(_e);
                     })
                 })
             })

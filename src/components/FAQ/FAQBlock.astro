@@ -4,7 +4,7 @@ import FAQItem from "./FAQItem.astro";
 const { block } = Astro.props;
 ---
 
-<ul class="fap-fap-block" id={block?.slug}>
+<ul class="fap-faq-block" id={block?.slug}>
     {
         <li>
             <ul>
@@ -13,3 +13,14 @@ const { block } = Astro.props;
         </li>
     }
 </ul>
+
+
+<style lang="scss">
+    .fap-faq-block {
+        padding: 0;
+        list-style-type: none;
+        & > li > ul {
+            padding: 0;
+        }
+    }
+</style>

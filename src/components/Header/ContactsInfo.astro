@@ -20,7 +20,7 @@ const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2?
     </ul>
 </nav>
 
-<style lang="scss">
+<style lang="scss" is:global>
     .fap-contacts-nav {
         @media (width < 768px) {
             display: none;
@@ -47,6 +47,15 @@ const contactsInfo = await fetch(`http://localhost:1337/api/navigation/render/2?
             align-items: center;
             gap: .35em;
             font-weight: 500;
+
+
+            & > :is(a, span) {
+                font-family: FontMedium, Roboto, Helvetica, sans-serif;
+                color: var(--color-black);
+                &:hover {
+                    text-decoration: none;
+                }
+            }
         }
     }
 </style>

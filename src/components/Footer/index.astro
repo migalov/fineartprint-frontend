@@ -36,6 +36,7 @@ const footerMenu = await fetch(
 
     & ul {
       padding: 0;
+      list-style-type: none;
     }
 
     & a {
@@ -79,6 +80,7 @@ const footerMenu = await fetch(
       display: flex;
       align-items: start;
       grid-template-areas: "s area-20 area-21 area-31 area-41";
+      gap: 1.42rem;
     }
 
     [data-grid-area="s"] {
@@ -110,6 +112,11 @@ const footerMenu = await fetch(
       e.addEventListener("click", (_e) => {
         _e.preventDefault();
         document.querySelector(".fap-footer").classList.toggle("show-sitemap");
+        window.scrollTo({
+          left: 0,
+          top: document.body.clientHeight,
+          behavior: "smooth",
+        });
       });
     });
 </script>

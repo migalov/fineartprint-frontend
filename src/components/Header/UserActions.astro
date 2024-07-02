@@ -2,16 +2,19 @@
 import Button from "../Button.astro";
 import DropdownMenu from "./DropdownMenu.astro";
 import Auth from "../Icons/Auth.astro";
+import Login from "../Buttons/Login.astro";
 
 const userMenu = await fetch(`http://localhost:1337/api/navigation/render/4`).then((x) => x.json());
+const { num } = Astro.props;
 ---
 
 <div class="fap-menu-user">
-  <label for="menu-user">
+  <label for={`menu-user-${num}`}>
     <Auth />
-    <span>Михаил Мигалов</span>
+    <span class="fap-menu-user__name">Михаил Мигалов</span>
+    <Login />
   </label>
-  <input hidden type="checkbox" name="menu-user" id="menu-user" />
+  <input hidden type="checkbox" name="menu-user" id={`menu-user-${num}`} />
   <DropdownMenu items={userMenu} />
 </div>
 
@@ -20,11 +23,28 @@ const userMenu = await fetch(`http://localhost:1337/api/navigation/render/4`).th
     .fap-menu-user {
         cursor: pointer;
         position: relative;
+        display: flex;
+        flex-wrap: wrap;
     }
-    [for="menu-user"] {
+    [for="menu-user-1"], [for="menu-user-2"] {
+        display: flex;
+        align-items: center;
+        gap: .5em;
         cursor: pointer;
         &:hover {
             color: var(--color-primary);
+            
         }
+        & .fap-menu-user__name:not(:empty) {
+          & + .fap-menu-user__login {
+            display: none;
+          }
+        }
+    }
+    .fap-menu-user__name:empty {
+      display: none;
+    }
+    .icon-login:has(~ .fap-menu-user__name:empty) {
+      display: none;
     }
 </style>

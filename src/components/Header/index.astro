@@ -11,23 +11,6 @@ import Phone from "../Icons/Phone.astro";
 import ActionsDesktop from "./ActionsDesktop.astro";
 import ActionsMobile from "./ActionsMobile.astro";
 ---
-<!-- <header class="fap-header">
-    <div class="container">
-        <div class="fap-header-grid">
-            <HeaderTop />
-            <div class="fap-user-actions">
-                <Button type="dark" url="/123">PrintProductoion</Button>
-                <Button type="medium" url="/123">Войти</Button>
-                <a href="#"><Cart /></a>
-            </div>
-            <div class="fap-header-middle">
-                <Logo />
-                <ContactsInfo />
-            </div>
-            <MainMenu />
-        </div>
-    </div>
-</header> -->
 <div class="fap-headers">
     <header class="fap-header">
         <div class="container">
@@ -61,13 +44,29 @@ import ActionsMobile from "./ActionsMobile.astro";
 
         & ul {
             padding: 0;
+            margin: 0;
+            list-style-type: none;
         }
 
         @media (width < 768px) {
             padding: 1.25rem 0;
         }
+
+        & .current {
+            position: relative;
+            &:after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                height: 2px;
+            }
+        }
     }
     .fap-header {
+        
     }
     .fap-header-container {
         display: flex;
@@ -77,6 +76,7 @@ import ActionsMobile from "./ActionsMobile.astro";
     .fap-header-grid {
         display: grid;
         grid-template-areas: "tp u" "mid mid";
+        gap: 1rem 0;
         @media (width < 768px) {
             grid-template-areas: "mid u";
         }

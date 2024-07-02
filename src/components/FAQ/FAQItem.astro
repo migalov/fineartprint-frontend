@@ -20,19 +20,26 @@ const nameDropdown = `${slug}-${item.id}`
 
 <style lang="scss" is:global>
 
-    h2 {
-        font-size: 1.14em;
-        color: var(--color-primary);
+
+
+    .fap-faq-item-head {
+        & h2 {
+            font-size: 1rem;
+            color: var(--color-primary);
+            // margin: 0 0 1em;
+        }
     }
 
     .fap-faq-item {
         padding: 1em 0;
         border-bottom: 1px solid var(--color-medium-gray);
+        list-style-type: none;
         & [type="checkbox"] {
             display: none;
             &:checked {
                 & ~ .fap-faq-item-answer {
                     grid-template-rows: 1fr;
+                    padding: 1em 0 0;
                 }
                 & ~ .fap-faq-item-head svg {
                     transform: rotate(180deg);
@@ -60,13 +67,22 @@ const nameDropdown = `${slug}-${item.id}`
     .fap-faq-item-answer {
         display: grid;
         grid-template-rows: 0fr;
-        transition: grid-template-rows 500ms;
+        transition-duration: 500ms;
+        transition-property: grid-template-rows, padding;
         width: 100%;
+        padding: 0 0 0;
     }
 
     .fap-faq-item-answer-inner {
 
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: .7em;
+
+        & p {
+            line-height: 1.6em;
+        }
 
         & ul {
             padding: 0 0 0 1.1em;

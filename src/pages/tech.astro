@@ -41,14 +41,18 @@ const d = flattenAttributes(response.data[0]);
                 "anc anc cont cont cont cont cont cont";
                 grid-template-columns: repeat(8, 1fr);
         }
-        
-            gap: 1.42rem;
+        gap: 1.42rem;
+        & :is(h1, h2, h3) {
+            text-transform: none!important;
+        }
     }
     .fap-faq-page__title {
         padding: 1rem 0;
         background-color: var(--color-white);
         grid-area: t;
         z-index: 1;
+        font-size: 1.5rem;
+        font-family: FontMedium, Roboto, Helvetica, sans-serif;
         @media (width < 768px) {
             position: sticky;
         }
@@ -66,7 +70,8 @@ const d = flattenAttributes(response.data[0]);
         background-color: #fff;
         grid-area: anc;
         overflow: auto;
-
+        gap: 1em;
+        list-style-type: none;
         @media (width <= 768px) {
             white-space: nowrap;
             padding: 0 0 1rem;
@@ -87,8 +92,12 @@ const d = flattenAttributes(response.data[0]);
         @media (width > 992px) {
             padding: 2rem 0;
         }
+
+        & a {
+
+        }
         
-        gap: 1em;
+        
     }
     .fap-faq-page-content {
         grid-area: cont;
@@ -99,13 +108,12 @@ const d = flattenAttributes(response.data[0]);
     .fap-faq-item-answer {
         grid-area: cont;
         & ul {
-            margin: 1em 0;
             list-style-type: circle;
         }
     }
     .fap-faq-anchor {
         padding: .7em 1em;
-        font-size: 1rem;
+        font-size: .875rem;
         font-weight: 400;
         font-family: "Roboto", 'Helvetica Neue', sans-serif;
         background-color: var(--color-medium-gray);
@@ -119,12 +127,6 @@ const d = flattenAttributes(response.data[0]);
 </style>
 
 <script>
-    // document.querySelectorAll(".fap-faq-page-content meta").forEach(el => {
-    //     el.remove();
-    // });
-
-
-
     const navLinks = document.querySelectorAll('.fap-faq-anchor');
     const anchors = document.querySelectorAll('a[href*="#"]');
     const anchorsBlock = document.querySelector('.fap-faq-page__anchors');

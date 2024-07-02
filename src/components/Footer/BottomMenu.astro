@@ -5,7 +5,7 @@ const footerBottomMenu = await fetch(`http://localhost:1337/api/navigation/rende
     {
         footerBottomMenu.map(item =>
             <li>
-                <a href={item.externalPath}>{item.title}</a>
+                <a href={item.externalPath.replace('https://fineart-print.ru/', '')}>{item.title}</a>
             </li>
         )
     }
